@@ -136,6 +136,7 @@ Item {
             }
             color: root.fgColour
             verticalAlignment: Qt.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
             font.family: Tokens.font.workspaces
         }
     }
@@ -149,6 +150,7 @@ Item {
             text: iconCacher.icon
             color: root.fgColour
             verticalAlignment: Qt.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
 
             WsIconCacher {
                 id: iconCacher
@@ -199,11 +201,13 @@ Item {
             Layout.alignment: Qt.AlignVCenter
             Layout.preferredWidth: root.hasWindows && item ? (item as Row).implicitWidth : 0
             Layout.preferredHeight: Tokens.sizes.bar.innerWidth - Tokens.padding.small
+            Layout.rightMargin: root.hasWindows ? Tokens.padding.small : 0
 
             visible: active
             active: root.showWindows && Config.bar.workspaces.maxWindowIcons > 0
 
             sourceComponent: Row {
+                anchors.verticalCenter: parent.verticalCenter
                 spacing: 2
 
                 Repeater {
@@ -223,6 +227,7 @@ Item {
 
                         grade: 0
                         horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
                         text: Icons.getAppCategoryIcon(modelData.lastIpcObject.class, "terminal")
                         color: root.onOtherMonitor ? root.offMonitorColour : Colours.palette.m3onSurfaceVariant
                     }

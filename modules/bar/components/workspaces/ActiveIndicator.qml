@@ -40,10 +40,12 @@ StyledRect {
     Component.onCompleted: runAnim()
 
     clip: true
-    x: start + mask.x
-    y: mask.y
+    x: start
+    y: 0
     implicitWidth: end - start
     implicitHeight: mask.height
+    width: implicitWidth
+    height: implicitHeight
     radius: Tokens.rounding.full
     color: Colours.palette.m3primary
 
