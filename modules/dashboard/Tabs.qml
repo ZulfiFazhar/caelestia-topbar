@@ -18,14 +18,64 @@ Item {
 
     readonly property alias count: bar.count
 
-    implicitHeight: bar.implicitHeight + bar.anchors.topMargin + indicator.implicitHeight + indicator.anchors.topMargin + separator.implicitHeight
+    implicitHeight: separator.implicitHeight + bar.implicitHeight + bar.anchors.topMargin + Tokens.sizes.dashboard.tabIndicatorSpacing
+
+    StyledRect {
+        id: separator
+
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        implicitHeight: 1
+        color: Colours.palette.m3outlineVariant
+    }
+
+    Item {
+        id: indicator
+
+        anchors.top: parent.top
+        anchors.topMargin: -1
+
+        implicitWidth: {
+            const tab = bar.currentItem;
+            if (tab)
+                return tab.implicitWidth;
+            const width = (root.nonAnimWidth - bar.spacing * (bar.count - 1)) / bar.count;
+            return width;
+        }
+        implicitHeight: 3
+
+        x: {
+            const tab = bar.currentItem;
+            const width = (root.nonAnimWidth - bar.spacing * (bar.count - 1)) / bar.count;
+            const tabWidth = tab?.implicitWidth ?? width;
+            return width * bar.currentIndex + (width - tabWidth) / 2;
+        }
+
+        clip: true
+
+        StyledRect {
+            anchors.fill: parent
+            color: Colours.palette.m3primary
+            radius: Tokens.rounding.full
+        }
+
+        Behavior on x {
+            Anim {}
+        }
+
+        Behavior on implicitWidth {
+            Anim {}
+        }
+    }
 
     TabBar {
         id: bar
 
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.top: parent.top
+        anchors.top: separator.bottom
         anchors.topMargin: Tokens.sizes.dashboard.tabIndicatorSpacing
 
         currentIndex: root.screenState.dashboardTab
@@ -53,60 +103,6 @@ Item {
                 text: modelData.text
             }
         }
-    }
-
-    Item {
-        id: indicator
-
-        anchors.top: bar.bottom
-        anchors.topMargin: 5
-
-        implicitWidth: {
-            const tab = bar.currentItem;
-            if (tab)
-                return tab.implicitWidth;
-            const width = (root.nonAnimWidth - bar.spacing * (bar.count - 1)) / bar.count;
-            return width;
-        }
-        implicitHeight: 3
-
-        x: {
-            const tab = bar.currentItem;
-            const width = (root.nonAnimWidth - bar.spacing * (bar.count - 1)) / bar.count;
-            const tabWidth = tab?.implicitWidth ?? width;
-            return width * bar.currentIndex + (width - tabWidth) / 2;
-        }
-
-        clip: true
-
-        StyledRect {
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
-            implicitHeight: parent.implicitHeight * 2
-
-            color: Colours.palette.m3primary
-            radius: Tokens.rounding.full
-        }
-
-        Behavior on x {
-            Anim {}
-        }
-
-        Behavior on implicitWidth {
-            Anim {}
-        }
-    }
-
-    StyledRect {
-        id: separator
-
-        anchors.top: indicator.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-
-        implicitHeight: 1
-        color: Colours.palette.m3outlineVariant
     }
 
     component Tab: TabButton {
