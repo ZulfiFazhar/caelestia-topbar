@@ -156,14 +156,12 @@ StyledClippingRect {
 
         Loader {
             asynchronous: true
-            anchors.fill: workspacesLayout
+            anchors.top: workspacesLayout.top
+            anchors.bottom: workspacesLayout.bottom
             active: Config.bar.workspaces.activeIndicator
 
             sourceComponent: ActiveIndicator {
-                activeWs: {
-                    wsRepeater.count;
-                    return wsRepeater.itemAt(root.activeWsIdx) as Workspace;
-                }
+                activeWs: wsRepeater.itemAt(root.activeWsIdx) as Workspace
                 mask: workspacesLayout
             }
         }
