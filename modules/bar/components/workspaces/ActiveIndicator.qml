@@ -21,17 +21,17 @@ StyledRect {
         if (!activeWs)
             return;
 
-        const newStart = activeWs.LazyListView.layoutY;
-        const goingUp = newStart < start;
+        const newStart = activeWs.x;
+        const goingLeft = newStart < start;
         const leadingDuration = Tokens.anim.durations.expressiveDefaultSpatial;
         const trailingDuration = leadingDuration * (Config.bar.workspaces.activeTrail ? 1.5 : 1);
 
         startAnim.stop();
         endAnim.stop();
         startAnim.to = newStart;
-        endAnim.to = newStart + activeWs.LazyListView.preferredHeight;
-        startAnim.duration = goingUp ? leadingDuration : trailingDuration;
-        endAnim.duration = goingUp ? trailingDuration : leadingDuration;
+        endAnim.to = newStart + activeWs.width;
+        startAnim.duration = goingLeft ? leadingDuration : trailingDuration;
+        endAnim.duration = goingLeft ? trailingDuration : leadingDuration;
         startAnim.start();
         endAnim.start();
     }
@@ -40,8 +40,10 @@ StyledRect {
     Component.onCompleted: runAnim()
 
     clip: true
-    y: start + mask.y
-    implicitHeight: end - start
+    x: start + mask.x
+    y: mask.y
+    implicitWidth: end - start
+    implicitHeight: mask.height
     radius: Tokens.rounding.full
     color: Colours.palette.m3primary
 
@@ -54,15 +56,15 @@ StyledRect {
     }
 
     Connections {
-        function onLayoutYChanged(): void {
+        function onXChanged(): void {
             root.runAnim();
         }
 
-        function onPreferredHeightChanged(): void {
+        function onWidthChanged(): void {
             root.runAnim();
         }
 
-        target: root.activeWs?.LazyListView ?? null
+        target: root.activeWs ?? null
     }
 
     Colouriser {
@@ -72,11 +74,11 @@ StyledRect {
         sourceColor: Colours.palette.m3onSurface
         colorizationColor: Colours.palette.m3onPrimary
 
-        x: 0
-        y: -parent.start
+        x: -parent.start
+        y: 0
         implicitWidth: root.mask.width
         implicitHeight: root.mask.height
 
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
     }
 }

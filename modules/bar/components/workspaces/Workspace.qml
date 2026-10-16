@@ -59,22 +59,18 @@ Item {
             shape.shape = Qt.binding(() => isOccupied ? MaterialShape.Square : MaterialShape.Circle);
     }
 
-    anchors.horizontalCenter: parent?.horizontalCenter
-    LazyListView.preferredHeight: LazyListView.removing ? 0 : layout.implicitHeight + (hasWindows ? Tokens.padding.extraSmall : 0)
-    LazyListView.visibleHeight: LazyListView.preferredHeight
+    anchors.verticalCenter: parent?.verticalCenter
+    implicitHeight: Tokens.sizes.bar.innerWidth - Tokens.padding.small
+    implicitWidth: layout.implicitWidth
+    width: implicitWidth
+    height: implicitHeight
 
-    opacity: LazyListView.removing || LazyListView.adding ? 0 : 1
+    opacity: 1
 
     onFocusedChanged: updateShape()
     Component.onCompleted: updateShape()
 
-    Behavior on LazyListView.visibleHeight {
-        Anim {}
-    }
-
-    Behavior on y {
-        enabled: root.LazyListView.ready
-
+    Behavior on width {
         Anim {}
     }
 
@@ -172,16 +168,17 @@ Item {
         }
     }
 
-    ColumnLayout {
+    RowLayout {
         id: layout
 
         anchors.fill: parent
-        spacing: 0
+        spacing: Tokens.spacing.extraSmall / 2
 
         Loader {
             id: indicator
 
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+            Layout.alignment: Qt.AlignVCenter
+            Layout.preferredWidth: Tokens.sizes.bar.innerWidth - Tokens.padding.small
             Layout.preferredHeight: Tokens.sizes.bar.innerWidth - Tokens.padding.small
             sourceComponent: {
                 if (root.displayType === BarWorkspaceDisplay.Icons)
@@ -199,48 +196,35 @@ Item {
 
             asynchronous: true
 
-            Layout.fillWidth: true
-            Layout.topMargin: -Tokens.spacing.extraSmall / 2
-            Layout.preferredHeight: root.hasWindows && item ? (item as LazyListView).layoutHeight : 0
+            Layout.alignment: Qt.AlignVCenter
+            Layout.preferredWidth: root.hasWindows && item ? (item as Row).implicitWidth : 0
+            Layout.preferredHeight: Tokens.sizes.bar.innerWidth - Tokens.padding.small
 
             visible: active
             active: root.showWindows && Config.bar.workspaces.maxWindowIcons > 0
 
-            sourceComponent: LazyListView {
-                spacing: 0
-                implicitHeight: contentHeight
-                cullDelegates: false
-                removeDuration: Tokens.anim.durations.expressiveDefaultEffects
+            sourceComponent: Row {
+                spacing: 2
 
-                model: ScriptModel {
-                    values: {
-                        const windows = root.toplevels;
-                        const maxIcons = root.Config.bar.workspaces.maxWindowIcons;
-                        return maxIcons > 0 ? windows.slice(0, maxIcons) : windows;
-                    }
-                }
-
-                delegate: MaterialIcon {
-                    id: win
-
-                    required property var modelData
-                    required property int index // Needed, LazyListView will fail to set it if it doesn't exist
-
-                    grade: 0
-                    horizontalAlignment: Text.AlignHCenter
-                    text: Icons.getAppCategoryIcon(modelData.lastIpcObject.class, "terminal")
-                    color: root.onOtherMonitor ? root.offMonitorColour : Colours.palette.m3onSurfaceVariant
-
-                    opacity: LazyListView.adding || LazyListView.removing ? 0 : 1
-
-                    Behavior on opacity {
-                        Anim {
-                            type: Anim.DefaultEffects
+                Repeater {
+                    model: ScriptModel {
+                        values: {
+                            const windows = root.toplevels;
+                            const maxIcons = root.Config.bar.workspaces.maxWindowIcons;
+                            return maxIcons > 0 ? windows.slice(0, maxIcons) : windows;
                         }
                     }
 
-                    Behavior on y {
-                        Anim {}
+                    MaterialIcon {
+                        id: win
+
+                        required property var modelData
+                        required property int index
+
+                        grade: 0
+                        horizontalAlignment: Text.AlignHCenter
+                        text: Icons.getAppCategoryIcon(modelData.lastIpcObject.class, "terminal")
+                        color: root.onOtherMonitor ? root.offMonitorColour : Colours.palette.m3onSurfaceVariant
                     }
                 }
             }

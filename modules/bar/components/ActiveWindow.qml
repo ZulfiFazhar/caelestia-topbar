@@ -1,6 +1,7 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
+import QtQuick.Layouts
 import Caelestia.Config
 import Caelestia.I18n
 import qs.components
@@ -27,17 +28,16 @@ Item {
         return title;
     }
 
-    readonly property int maxHeight: {
+    readonly property int maxWidth: {
         const otherModules = bar.children.filter(c => c.entryId && c.item !== this && c.entryId !== "spacer");
-        const otherHeight = otherModules.reduce((acc, curr) => acc + (curr.item.nonAnimHeight ?? curr.height), 0);
-        // Length - 2 cause repeater counts as a child
-        return bar.height - otherHeight - bar.spacing * (bar.children.length - 1) - bar.vPadding * 2;
+        const otherWidth = otherModules.reduce((acc, curr) => acc + (curr.item.nonAnimWidth ?? curr.width), 0);
+        return Math.max(100, Math.min(350, bar.width - otherWidth - bar.spacing * (bar.children.length - 1) - bar.hPadding * 2));
     }
     property Title current: text1
 
     clip: true
-    implicitWidth: Math.max(icon.implicitWidth, current.implicitHeight)
-    implicitHeight: icon.implicitHeight + current.implicitWidth + current.anchors.topMargin
+    implicitHeight: Tokens.sizes.bar.innerWidth
+    implicitWidth: icon.implicitWidth + current.implicitWidth + Tokens.spacing.small
 
     Loader {
         asynchronous: true
@@ -58,29 +58,40 @@ Item {
                     popouts.hasCurrent = false;
                 } else {
                     popouts.currentName = "activewindow";
-                    popouts.currentCenter = root.mapToItem(root.bar, 0, root.implicitHeight / 2).y;
+                    popouts.currentCenter = root.mapToItem(root.bar, root.implicitWidth / 2, 0).x;
                     popouts.hasCurrent = true;
                 }
             }
         }
     }
 
-    MaterialIcon {
-        id: icon
+    RowLayout {
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
+        spacing: Tokens.spacing.small
 
-        anchors.horizontalCenter: parent.horizontalCenter
+        MaterialIcon {
+            id: icon
 
-        animate: true
-        text: Icons.getAppCategoryIcon(Hypr.activeToplevel?.lastIpcObject.class, "desktop_windows")
-        color: root.colour
-    }
+            Layout.alignment: Qt.AlignVCenter
+            animate: true
+            text: Icons.getAppCategoryIcon(Hypr.activeToplevel?.lastIpcObject.class, "desktop_windows")
+            color: root.colour
+        }
 
-    Title {
-        id: text1
-    }
+        Item {
+            Layout.alignment: Qt.AlignVCenter
+            implicitWidth: root.current.implicitWidth
+            implicitHeight: root.current.implicitHeight
 
-    Title {
-        id: text2
+            Title {
+                id: text1
+            }
+
+            Title {
+                id: text2
+            }
+        }
     }
 
     TextMetrics {
@@ -89,7 +100,7 @@ Item {
         text: root.windowTitle
         font: root.Tokens.font.body.builders.small.letterSpacing(1.4).build()
         elide: Qt.ElideRight
-        elideWidth: root.maxHeight - icon.height
+        elideWidth: Math.max(50, root.maxWidth - icon.width - 8)
 
         onTextChanged: {
             const next = root.current === text1 ? text2 : text1;
@@ -99,35 +110,20 @@ Item {
         onElideWidthChanged: root.current.text = elidedText
     }
 
-    Behavior on implicitHeight {
+    Behavior on implicitWidth {
         Anim {}
     }
 
     component Title: StyledText {
         id: text
 
-        anchors.horizontalCenter: icon.horizontalCenter
-        anchors.top: icon.bottom
-        anchors.topMargin: Tokens.spacing.small
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
 
         font: metrics.font
         color: root.colour
         opacity: root.current === this ? 1 : 0
         horizontalAlignment: Text.AlignLeft
-
-        transform: [
-            Translate {
-                x: root.Config.bar.activeWindow.inverted ? -text.implicitWidth + text.implicitHeight : 0
-            },
-            Rotation {
-                angle: root.Config.bar.activeWindow.inverted ? 270 : 90
-                origin.x: text.implicitHeight / 2
-                origin.y: text.implicitHeight / 2
-            }
-        ]
-
-        width: implicitHeight
-        height: implicitWidth
 
         Behavior on opacity {
             Anim {

@@ -48,10 +48,10 @@ Item {
         required property int index
         required property Workspace modelData
 
-        property real topRadius: ifAdjacent(0, -1, 0, width / 2)
-        property real bottomRadius: ifAdjacent(root.workspaces.length - 1, 1, 0, width / 2)
-        property real topPadding: ifAdjacent(0, -1, root.wsSpacing, 0)
-        property real bottomPadding: ifAdjacent(root.workspaces.length - 1, 1, root.wsSpacing, 0)
+        property real leftRadius: ifAdjacent(0, -1, 0, height / 2)
+        property real rightRadius: ifAdjacent(root.workspaces.length - 1, 1, 0, height / 2)
+        property real leftPadding: ifAdjacent(0, -1, root.wsSpacing, 0)
+        property real rightPadding: ifAdjacent(root.workspaces.length - 1, 1, root.wsSpacing, 0)
 
         function ifAdjacent(exclIdx: int, adj: int, yes: real, no: real): real {
             if (AnimatedRepeater.adding || AnimatedRepeater.removing || !modelData?.isOccupied || index === exclIdx)
@@ -59,40 +59,40 @@ Item {
             return root.workspaces[index + adj]?.isOccupied ? yes : no;
         }
 
-        anchors.left: parent?.left
-        anchors.right: parent?.right
+        anchors.top: parent?.top
+        anchors.bottom: parent?.bottom
         anchors.margins: -1
 
-        y: modelData ? modelData.y + anchors.margins - topPadding : 0
-        implicitHeight: modelData ? modelData.LazyListView.visibleHeight - anchors.margins * 2 + topPadding + bottomPadding : 0
+        x: modelData ? modelData.x + anchors.margins - leftPadding : 0
+        implicitWidth: modelData ? modelData.width - anchors.margins * 2 + leftPadding + rightPadding : 0
 
         color: Qt.alpha(root.colour, 1)
-        topLeftRadius: topRadius
-        topRightRadius: topRadius
-        bottomLeftRadius: bottomRadius
-        bottomRightRadius: bottomRadius
+        topLeftRadius: leftRadius
+        bottomLeftRadius: leftRadius
+        topRightRadius: rightRadius
+        bottomRightRadius: rightRadius
 
         opacity: modelData?.isOccupied ? 1 : 0
 
-        Behavior on topRadius {
+        Behavior on leftRadius {
             Anim {
                 type: Anim.DefaultEffects
             }
         }
 
-        Behavior on bottomRadius {
+        Behavior on rightRadius {
             Anim {
                 type: Anim.DefaultEffects
             }
         }
 
-        Behavior on topPadding {
+        Behavior on leftPadding {
             Anim {
                 type: Anim.DefaultEffects
             }
         }
 
-        Behavior on bottomPadding {
+        Behavior on rightPadding {
             Anim {
                 type: Anim.DefaultEffects
             }
