@@ -208,7 +208,6 @@ Item {
 
             sourceComponent: Row {
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: 1
                 spacing: 2
 
                 Repeater {
@@ -225,6 +224,9 @@ Item {
 
                         required property var modelData
                         required property int index
+
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.verticalCenterOffset: 1
 
                         grade: 0
                         horizontalAlignment: Text.AlignHCenter
