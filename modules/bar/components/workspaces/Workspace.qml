@@ -201,6 +201,7 @@ Item {
             Layout.alignment: Qt.AlignVCenter
             Layout.preferredWidth: root.hasWindows && item ? (item as Row).implicitWidth : 0
             Layout.preferredHeight: Tokens.sizes.bar.innerWidth - Tokens.padding.small
+            Layout.rightMargin: root.hasWindows ? Tokens.padding.small : 0
 
             visible: active
             active: root.showWindows && Config.bar.workspaces.maxWindowIcons > 0
