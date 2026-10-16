@@ -112,8 +112,8 @@ Item {
 
         screenState: root.screenState
 
-        anchors.left: parent.left
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
     }
 
     BarPopouts.ClipWrapper {

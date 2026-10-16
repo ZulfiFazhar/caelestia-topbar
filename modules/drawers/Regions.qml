@@ -23,8 +23,8 @@ Region {
 
     R {
         panel: root.panels.dashboard
-        x: 0
-        width: panel.width * (1 - root.panels.dashboard.offsetScale) + root.borderThickness
+        y: root.win.height - height
+        height: panel.height * (1 - root.panels.dashboard.offsetScale) + root.borderThickness
     }
 
     R {
