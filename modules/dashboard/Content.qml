@@ -47,7 +47,7 @@ Item {
     }
 
     readonly property real nonAnimWidth: view.implicitWidth + viewWrapper.anchors.margins * 2
-    readonly property real nonAnimHeight: tabs.implicitHeight + tabs.anchors.bottomMargin + view.implicitHeight + viewWrapper.anchors.margins * 2
+    readonly property real nonAnimHeight: tabs.implicitHeight + tabs.anchors.bottomMargin + view.implicitHeight + viewWrapper.anchors.topMargin + viewWrapper.anchors.bottomMargin
 
     implicitWidth: nonAnimWidth
     implicitHeight: nonAnimHeight
@@ -60,7 +60,7 @@ Item {
         anchors.right: parent.right
         anchors.bottom: tabs.top
         anchors.margins: Tokens.padding.large
-        anchors.topMargin: CUtils.clamp(anchors.margins - Config.border.thickness, 0, anchors.margins)
+        anchors.topMargin: Tokens.padding.largeIncreased
 
         radius: Tokens.rounding.large
         color: "transparent"
