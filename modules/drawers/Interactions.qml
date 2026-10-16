@@ -43,7 +43,11 @@ CustomMouseArea {
     }
 
     function inTopPanel(panel: Item, x: real, y: real): bool {
-        return y < bar.implicitHeight;
+        const panelY = bar.implicitHeight + panel.y;
+        const inY = popouts.isDetached
+            ? y >= panelY - Config.border.rounding && y <= panelY + panel.height + Config.border.rounding
+            : y < panelY + panel.height + Config.border.rounding;
+        return inY && withinPanelWidth(panel, x, y);
     }
 
     function inBottomPanel(panel: Item, x: real, y: real, isCorner = false): bool {

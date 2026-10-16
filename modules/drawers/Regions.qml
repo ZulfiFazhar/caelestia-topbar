@@ -69,7 +69,6 @@ Region {
 
     R {
         panel: root.panels.popoutsWrapper
-        y: 0
         height: panel.height * (1 - root.panels.popoutsWrapper.offsetScale)
     }
 
