@@ -254,7 +254,9 @@ StyledRect {
                 contentHeight: Math.max(height, editor.contentHeight + 20)
                 clip: true
 
-                StyledScrollBar.vertical: StyledScrollBar {}
+                StyledScrollBar.vertical: StyledScrollBar {
+                    flickable: flickable
+                }
 
                 TextEdit {
                     id: editor

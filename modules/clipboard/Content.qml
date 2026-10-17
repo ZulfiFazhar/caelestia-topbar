@@ -159,7 +159,9 @@ StyledRect {
                     id: listModel
                 }
 
-                StyledScrollBar.vertical: StyledScrollBar {}
+                StyledScrollBar.vertical: StyledScrollBar {
+                    flickable: listView
+                }
 
                 delegate: Item {
                     id: itemDelegate
