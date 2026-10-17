@@ -72,6 +72,22 @@ Region {
         height: panel.height * (1 - root.panels.popoutsWrapper.offsetScale)
     }
 
+    R {
+        panel: root.panels.clipboard
+        x: 0
+        y: root.win.height - height
+        width: panel.width * (1 - root.panels.clipboard.offsetScale) + root.borderThickness
+        height: panel.height * (1 - root.panels.clipboard.offsetScale) + root.borderThickness
+    }
+
+    R {
+        panel: root.panels.notes
+        x: 0
+        y: panel.y + root.bar.implicitHeight
+        width: panel.width * (1 - root.panels.notes.offsetScale) + root.borderThickness
+        height: panel.height
+    }
+
     component R: Region {
         required property Item panel
 

@@ -55,6 +55,20 @@ CustomMouseArea {
         return y > height - Math.max(Config.border.minThickness, Config.border.thickness + panelHeight) - (isCorner ? Config.border.rounding : 0) && withinPanelWidth(panel, x, y);
     }
 
+    function inBottomLeftPanel(panel: Item, x: real, y: real): bool {
+        const panelHeight = panel.height * (1 - (panel.offsetScale ?? 0));
+        const panelWidth = panel.width * (1 - (panel.offsetScale ?? 0));
+        const activeW = Math.max(250, panelWidth);
+        const activeH = Math.max(Config.border.minThickness, panelHeight);
+        return x <= activeW && y >= height - activeH;
+    }
+
+    function inLeftSidebar(panel: Item, x: real, y: real): bool {
+        const panelWidth = panel.width * (1 - (panel.offsetScale ?? 0));
+        const activeW = Math.max(Config.border.minThickness, panelWidth);
+        return x <= activeW && withinPanelHeight(panel, x, y);
+    }
+
     function onWheel(event: WheelEvent): void {
         if (fullscreen)
             return;
@@ -92,6 +106,12 @@ CustomMouseArea {
 
             if (Config.sidebar.showOnHover)
                 screenState.sidebar = false;
+
+            if (!panels.clipboard.isFocused)
+                screenState.clipboard = false;
+
+            if (!panels.notes.isFocused)
+                screenState.notes = false;
         }
     }
 
@@ -241,6 +261,18 @@ CustomMouseArea {
             utilitiesShortcutActive = false;
         }
 
+        // Show clipboard on hover
+        const showClipboard = inBottomLeftPanel(panels.clipboard, x, y);
+        if (!panels.clipboard.isFocused) {
+            screenState.clipboard = showClipboard;
+        }
+
+        // Show notes on hover
+        const showNotes = inLeftSidebar(panels.notes, x, y);
+        if (!panels.notes.isFocused) {
+            screenState.notes = showNotes;
+        }
+
         // Show popouts on hover
         if (y < bar.implicitHeight) {
             bar.checkPopout(x);
@@ -252,9 +284,27 @@ CustomMouseArea {
 
     // Monitor individual visibility changes
     Connections {
+        function onClipboardChanged() {
+            if (root.screenState.clipboard) {
+                root.screenState.notes = false;
+                root.screenState.launcher = false;
+                root.screenState.dashboard = false;
+            }
+        }
+
+        function onNotesChanged() {
+            if (root.screenState.notes) {
+                root.screenState.clipboard = false;
+                root.screenState.launcher = false;
+                root.screenState.dashboard = false;
+            }
+        }
+
         function onLauncherChanged() {
             if (root.screenState.launcher) {
                 root.screenState.dashboard = false;
+                root.screenState.clipboard = false;
+                root.screenState.notes = false;
             } else {
                 // If launcher is hidden, clear shortcut flags for dashboard and OSD
                 root.dashboardShortcutActive = false;
@@ -278,6 +328,8 @@ CustomMouseArea {
         function onDashboardChanged() {
             if (root.screenState.dashboard) {
                 root.screenState.launcher = false;
+                root.screenState.clipboard = false;
+                root.screenState.notes = false;
                 // Dashboard became visible, immediately check if this should be shortcut mode
                 const inDashboardArea = root.inBottomPanel(root.panels.dashboard, root.mouseX, root.mouseY);
                 if (!inDashboardArea) {
