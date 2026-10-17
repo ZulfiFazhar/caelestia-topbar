@@ -7,6 +7,7 @@ import Quickshell.Io
 import Caelestia
 import Caelestia.Config
 import Caelestia.I18n
+import Caelestia.Models
 import qs.components
 import qs.components.containers
 import qs.components.controls
