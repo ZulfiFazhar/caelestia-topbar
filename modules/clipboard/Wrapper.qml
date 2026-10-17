@@ -21,6 +21,8 @@ Item {
     anchors.bottomMargin: (-implicitHeight - 5) * offsetScale
     implicitWidth: 380
     implicitHeight: Math.min(520, parent.height * 0.65)
+    width: implicitWidth
+    height: implicitHeight
     opacity: 1 - offsetScale
 
     Behavior on offsetScale {
