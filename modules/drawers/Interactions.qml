@@ -35,9 +35,9 @@ CustomMouseArea {
         return x >= panelX - Config.border.rounding && x <= panelX + panel.width + Config.border.rounding;
     }
 
-    function inLeftPanel(panel: Item, x: real, y: real): bool {
+    function inLeftPanel(panel: Item, x: real, y: real, isCorner = false): bool {
         const panelWidth = panel.width * (1 - (panel.offsetScale ?? 0));
-        return x < Math.max(Config.border.minThickness, root.borderThickness + panelWidth) && withinPanelHeight(panel, x, y);
+        return x < Math.max(Config.border.minThickness, Config.border.thickness + panelWidth) + (isCorner ? Config.border.rounding : 0) && withinPanelHeight(panel, x, y);
     }
 
     function inRightPanel(panel: Item, x: real, y: real): bool {
@@ -57,24 +57,6 @@ CustomMouseArea {
         return y > height - Math.max(Config.border.minThickness, Config.border.thickness + panelHeight) - (isCorner ? Config.border.rounding : 0) && withinPanelWidth(panel, x, y);
     }
 
-    function inBottomLeftPanel(panel: Item, x: real, y: real): bool {
-        if (screenState.clipboard) {
-            return x <= panel.width + root.borderThickness + Config.border.rounding &&
-                   y >= height - panel.height - root.borderThickness - Config.border.rounding;
-        }
-        return x <= 300 && y >= height - Config.border.thickness - Config.border.rounding;
-    }
-
-    function inLeftSidebar(panel: Item, x: real, y: real): bool {
-        if (screenState.notes) {
-            return x <= panel.width + root.borderThickness + Config.border.rounding &&
-                   withinPanelHeight(panel, x, y);
-        }
-        return x <= Config.border.thickness + 5 &&
-               y > bar.implicitHeight &&
-               y < height - 150;
-    }
-
     function onWheel(event: WheelEvent): void {
         if (fullscreen)
             return;
@@ -89,11 +71,11 @@ CustomMouseArea {
 
     onPressed: event => {
         dragStart = Qt.point(event.x, event.y);
-        if (screenState.clipboard && !inBottomLeftPanel(panels.clipboard, event.x, event.y)) {
+        if (screenState.clipboard && !inBottomPanel(panels.clipboard, event.x, event.y, true)) {
             screenState.clipboard = false;
             clipboardShortcutActive = false;
         }
-        if (screenState.notes && !inLeftSidebar(panels.notes, event.x, event.y)) {
+        if (screenState.notes && !inLeftPanel(panels.notes, event.x, event.y, true)) {
             screenState.notes = false;
             notesShortcutActive = false;
         }
@@ -278,7 +260,7 @@ CustomMouseArea {
         }
 
         // Show clipboard on hover
-        const showClipboard = inBottomLeftPanel(panels.clipboard, x, y);
+        const showClipboard = inBottomPanel(panels.clipboard, x, y, true);
         if (!clipboardShortcutActive) {
             if (!panels.clipboard.isFocused)
                 screenState.clipboard = showClipboard;
@@ -287,7 +269,7 @@ CustomMouseArea {
         }
 
         // Show notes on hover
-        const showNotes = inLeftSidebar(panels.notes, x, y);
+        const showNotes = inLeftPanel(panels.notes, x, y, true);
         if (!notesShortcutActive) {
             if (!panels.notes.isFocused)
                 screenState.notes = showNotes;
@@ -311,7 +293,7 @@ CustomMouseArea {
                 root.screenState.notes = false;
                 root.screenState.launcher = false;
                 root.screenState.dashboard = false;
-                const inClipArea = root.inBottomLeftPanel(root.panels.clipboard, root.mouseX, root.mouseY);
+                const inClipArea = root.inBottomPanel(root.panels.clipboard, root.mouseX, root.mouseY, true);
                 if (!inClipArea)
                     root.clipboardShortcutActive = true;
             } else {
@@ -324,7 +306,7 @@ CustomMouseArea {
                 root.screenState.clipboard = false;
                 root.screenState.launcher = false;
                 root.screenState.dashboard = false;
-                const inNotesArea = root.inLeftSidebar(root.panels.notes, root.mouseX, root.mouseY);
+                const inNotesArea = root.inLeftPanel(root.panels.notes, root.mouseX, root.mouseY, true);
                 if (!inNotesArea)
                     root.notesShortcutActive = true;
             } else {

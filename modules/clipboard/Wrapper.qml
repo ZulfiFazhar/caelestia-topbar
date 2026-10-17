@@ -20,7 +20,7 @@ Item {
     anchors.bottom: parent.bottom
     anchors.bottomMargin: (-implicitHeight - 5) * offsetScale
     implicitWidth: 380
-    implicitHeight: Math.min(520, parent.height * 0.65)
+    implicitHeight: 520
     width: implicitWidth
     height: implicitHeight
     opacity: 1 - offsetScale

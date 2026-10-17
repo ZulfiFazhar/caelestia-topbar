@@ -74,18 +74,14 @@ Region {
 
     R {
         panel: root.panels.clipboard
-        x: 0
         y: root.win.height - height
-        width: panel.width * (1 - root.panels.clipboard.offsetScale) + root.borderThickness * 2
-        height: panel.height * (1 - root.panels.clipboard.offsetScale) + root.borderThickness * 2
+        height: panel.height * (1 - root.panels.clipboard.offsetScale) + root.borderThickness
     }
 
     R {
         panel: root.panels.notes
         x: 0
-        y: panel.y + root.bar.implicitHeight - root.borderThickness
-        width: panel.width * (1 - root.panels.notes.offsetScale) + root.borderThickness * 2
-        height: panel.height + root.borderThickness * 2
+        width: panel.width * (1 - root.panels.notes.offsetScale) + root.borderThickness
     }
 
     component R: Region {
