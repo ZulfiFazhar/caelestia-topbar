@@ -15,7 +15,8 @@ StyledRect {
     property color colour: Colours.palette.m3secondary
     readonly property alias items: iconRow
 
-    readonly property int spacing: Tokens.spacing.medium / 2
+    readonly property int padding: Tokens.padding.large
+    readonly property int spacing: Tokens.spacing.medium
 
     // Index of the first/last entry that isn't collapsed, for edge margin gating
     readonly property int firstPresent: {
@@ -45,7 +46,7 @@ StyledRect {
 
     clip: true
     implicitHeight: Tokens.sizes.bar.innerWidth
-    implicitWidth: iconRow.implicitWidth + Tokens.padding.medium * 2
+    implicitWidth: iconRow.implicitWidth + root.padding * 2
 
     RowLayout {
         id: iconRow
