@@ -12,18 +12,13 @@ import qs.components.containers
 import qs.components.controls
 import qs.services
 
-StyledRect {
+Item {
     id: root
 
     required property ScreenState screenState
 
     readonly property bool isInputFocused: searchBar.activeFocus
     property var rawList: []
-
-    color: Colours.tPalette.m3surfaceContainer
-    radius: Tokens.rounding.large
-    border.color: Colours.palette.m3outlineVariant
-    border.width: Config.border.thickness
 
     function reload(): void {
         listProc.running = true;
@@ -163,7 +158,7 @@ StyledRect {
                     flickable: listView
                 }
 
-                delegate: Item {
+                delegate: StyledRect {
                     id: itemDelegate
 
                     required property string clipId
@@ -174,10 +169,14 @@ StyledRect {
 
                     width: listView.width
                     height: 48
+                    radius: Tokens.rounding.large
+                    color: itemState.hovered ? Colours.tPalette.m3surfaceContainerHigh : Colours.tPalette.m3surfaceContainerLow
 
                     StateLayer {
+                        id: itemState
+
                         anchors.fill: parent
-                        radius: Tokens.rounding.medium
+                        radius: Tokens.rounding.large
                         onClicked: {
                             Quickshell.execDetached(["sh", "-c", "printf '%s\\n' \"$1\" | cliphist decode | wl-copy", "--", itemDelegate.fullLine]);
                             root.screenState.clipboard = false;
@@ -186,8 +185,8 @@ StyledRect {
 
                     RowLayout {
                         anchors.fill: parent
-                        anchors.leftMargin: Tokens.padding.small
-                        anchors.rightMargin: Tokens.padding.small
+                        anchors.leftMargin: Tokens.padding.medium
+                        anchors.rightMargin: Tokens.padding.medium
                         spacing: Tokens.spacing.medium
 
                         MaterialIcon {

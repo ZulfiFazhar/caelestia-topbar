@@ -14,7 +14,7 @@ import qs.components.controls
 import qs.services
 import qs.utils
 
-StyledRect {
+Item {
     id: root
 
     required property ScreenState screenState
@@ -26,11 +26,6 @@ StyledRect {
     property string saveStatusText: Tr.tr("Ready")
 
     readonly property bool isInputFocused: editor.activeFocus
-
-    color: Colours.tPalette.m3surfaceContainer
-    radius: Tokens.rounding.large
-    border.color: Colours.palette.m3outlineVariant
-    border.width: Config.border.thickness
 
     function initVault(): void {
         Quickshell.execDetached(["mkdir", "-p", root.vaultPath]);
@@ -240,8 +235,8 @@ StyledRect {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            color: Colours.palette.m3surfaceContainerLowest
-            radius: Tokens.rounding.medium
+            color: Colours.tPalette.m3surfaceContainerLow
+            radius: Tokens.rounding.large
             border.color: editor.activeFocus ? Colours.palette.m3primary : Colours.palette.m3outlineVariant
             border.width: editor.activeFocus ? 2 : 1
 

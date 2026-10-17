@@ -52,9 +52,9 @@ StyledWindow {
             return 0;
 
         const thresholds = [];
-        for (const panel of ["dashboard", "launcher", "session", "sidebar"])
-            if (contentItem.Config[panel].enabled)
-                thresholds.push(contentItem.Config[panel].dragThreshold);
+        for (const panel of ["dashboard", "launcher", "session", "sidebar", "clipboard", "notes"])
+            if (contentItem.Config[panel]?.enabled ?? true)
+                thresholds.push(contentItem.Config[panel]?.dragThreshold ?? 10);
         return Math.max(...thresholds);
     }
 
@@ -236,6 +236,27 @@ StyledWindow {
         }
 
         PanelBg {
+            id: clipboardBg
+
+            panel: panels.clipboard
+            deformAmount: 0.1
+            topRightRadius: radius
+            topLeftRadius: Math.max(0, Math.min(1, panels.clipboard.offsetScale / 0.3)) * radius
+            bottomRightRadius: Math.max(0, Math.min(1, panels.clipboard.offsetScale / 0.3)) * radius
+        }
+
+        PanelBg {
+            id: notesBg
+
+            panel: panels.notes
+            deformAmount: 0.05
+            topRightRadius: radius
+            bottomRightRadius: radius
+            topLeftRadius: Math.max(0, Math.min(1, panels.notes.offsetScale / 0.3)) * radius
+            bottomLeftRadius: Math.max(0, Math.min(1, panels.notes.offsetScale / 0.3)) * radius
+        }
+
+        PanelBg {
             id: popoutBg
 
             // Extra height to prevent horizontal movement deformation partially detaching panel from topbar
@@ -294,6 +315,12 @@ StyledWindow {
             }
             utilities.transform: Matrix4x4 {
                 matrix: utilsBg.deformMatrix
+            }
+            clipboard.transform: Matrix4x4 {
+                matrix: clipboardBg.deformMatrix
+            }
+            notes.transform: Matrix4x4 {
+                matrix: notesBg.deformMatrix
             }
             popouts.transform: Matrix4x4 {
                 matrix: popoutBg.deformMatrix

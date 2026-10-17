@@ -33,6 +33,9 @@ Item {
         id: content
 
         anchors.fill: parent
+        anchors.margins: Tokens.padding.large
+        anchors.leftMargin: Tokens.padding.large + Config.border.thickness
+        anchors.bottomMargin: Tokens.padding.large + Config.border.thickness
 
         active: root.shouldBeActive || root.visible
 
