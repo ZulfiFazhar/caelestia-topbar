@@ -22,8 +22,8 @@ CustomMouseArea {
     property bool dashboardShortcutActive
     property bool osdShortcutActive
     property bool utilitiesShortcutActive
-    property bool clipboardShortcutActive
-    property bool notesShortcutActive
+    property bool clipboardHoverActive
+    property bool notesHoverActive
 
     function withinPanelHeight(panel: Item, x: real, y: real): bool {
         const panelY = bar.implicitHeight + panel.y;
@@ -73,11 +73,11 @@ CustomMouseArea {
         dragStart = Qt.point(event.x, event.y);
         if (screenState.clipboard && !inBottomPanel(panels.clipboard, event.x, event.y, true)) {
             screenState.clipboard = false;
-            clipboardShortcutActive = false;
+            clipboardHoverActive = false;
         }
         if (screenState.notes && !inLeftPanel(panels.notes, event.x, event.y, true)) {
             screenState.notes = false;
-            notesShortcutActive = false;
+            notesHoverActive = false;
         }
     }
     onContainsMouseChanged: {
@@ -105,11 +105,15 @@ CustomMouseArea {
             if (Config.sidebar.showOnHover)
                 screenState.sidebar = false;
 
-            if (!clipboardShortcutActive && !panels.clipboard.isFocused)
+            if (clipboardHoverActive && !panels.clipboard.isFocused) {
                 screenState.clipboard = false;
+                clipboardHoverActive = false;
+            }
 
-            if (!notesShortcutActive && !panels.notes.isFocused)
+            if (notesHoverActive && !panels.notes.isFocused) {
                 screenState.notes = false;
+                notesHoverActive = false;
+            }
         }
     }
 
@@ -260,21 +264,29 @@ CustomMouseArea {
         }
 
         // Show clipboard on hover
-        const showClipboard = inBottomPanel(panels.clipboard, x, y, true);
-        if (!clipboardShortcutActive) {
-            if (!panels.clipboard.isFocused)
-                screenState.clipboard = showClipboard;
-        } else if (showClipboard) {
-            clipboardShortcutActive = false;
+        if (!screenState.clipboard) {
+            if (inBottomPanel(panels.clipboard, x, y, true)) {
+                clipboardHoverActive = true;
+                screenState.clipboard = true;
+            }
+        } else if (clipboardHoverActive) {
+            if (!inBottomPanel(panels.clipboard, x, y, true) && !panels.clipboard.isFocused) {
+                clipboardHoverActive = false;
+                screenState.clipboard = false;
+            }
         }
 
         // Show notes on hover
-        const showNotes = inLeftPanel(panels.notes, x, y, true);
-        if (!notesShortcutActive) {
-            if (!panels.notes.isFocused)
-                screenState.notes = showNotes;
-        } else if (showNotes) {
-            notesShortcutActive = false;
+        if (!screenState.notes) {
+            if (inLeftPanel(panels.notes, x, y, true)) {
+                notesHoverActive = true;
+                screenState.notes = true;
+            }
+        } else if (notesHoverActive) {
+            if (!inLeftPanel(panels.notes, x, y, true) && !panels.notes.isFocused) {
+                notesHoverActive = false;
+                screenState.notes = false;
+            }
         }
 
         // Show popouts on hover
@@ -293,11 +305,8 @@ CustomMouseArea {
                 root.screenState.notes = false;
                 root.screenState.launcher = false;
                 root.screenState.dashboard = false;
-                const inClipArea = root.inBottomPanel(root.panels.clipboard, root.mouseX, root.mouseY, true);
-                if (!inClipArea)
-                    root.clipboardShortcutActive = true;
             } else {
-                root.clipboardShortcutActive = false;
+                root.clipboardHoverActive = false;
             }
         }
 
@@ -306,11 +315,8 @@ CustomMouseArea {
                 root.screenState.clipboard = false;
                 root.screenState.launcher = false;
                 root.screenState.dashboard = false;
-                const inNotesArea = root.inLeftPanel(root.panels.notes, root.mouseX, root.mouseY, true);
-                if (!inNotesArea)
-                    root.notesShortcutActive = true;
             } else {
-                root.notesShortcutActive = false;
+                root.notesHoverActive = false;
             }
         }
 
@@ -324,8 +330,8 @@ CustomMouseArea {
                 root.dashboardShortcutActive = false;
                 root.osdShortcutActive = false;
                 root.utilitiesShortcutActive = false;
-                root.clipboardShortcutActive = false;
-                root.notesShortcutActive = false;
+                root.clipboardHoverActive = false;
+                root.notesHoverActive = false;
 
                 // Also hide dashboard and OSD if they're not being hovered
                 const inDashboardArea = root.inBottomPanel(root.panels.dashboard, root.mouseX, root.mouseY);
