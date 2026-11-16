@@ -117,7 +117,12 @@ Scope {
             if (root.hasFullscreen)
                 return;
             const screenState = ShellState.forActive();
-            screenState.clipboard = !screenState.clipboard;
+            if (screenState.clipboard && screenState.clipboardTab === 0) {
+                screenState.clipboard = false;
+            } else {
+                screenState.clipboardTab = 0;
+                screenState.clipboard = true;
+            }
         }
     }
 
@@ -130,16 +135,39 @@ Scope {
             if (root.hasFullscreen)
                 return;
             const screenState = ShellState.forActive();
-            screenState.notes = !screenState.notes;
+            if (screenState.clipboard && screenState.clipboardTab === 1) {
+                screenState.clipboard = false;
+            } else {
+                screenState.clipboardTab = 1;
+                screenState.clipboard = true;
+            }
         }
     }
 
     IpcHandler {
         function toggle(drawer: string): void {
+            if (root.hasFullscreen && ["launcher", "session", "dashboard"].includes(drawer))
+                return;
+            const screenState = ShellState.forActive();
+            if (drawer === "clipboard") {
+                if (screenState.clipboard && screenState.clipboardTab === 0) {
+                    screenState.clipboard = false;
+                } else {
+                    screenState.clipboardTab = 0;
+                    screenState.clipboard = true;
+                }
+                return;
+            }
+            if (drawer === "notes") {
+                if (screenState.clipboard && screenState.clipboardTab === 1) {
+                    screenState.clipboard = false;
+                } else {
+                    screenState.clipboardTab = 1;
+                    screenState.clipboard = true;
+                }
+                return;
+            }
             if (list().split("\n").includes(drawer)) {
-                if (root.hasFullscreen && ["launcher", "session", "dashboard"].includes(drawer))
-                    return;
-                const screenState = ShellState.forActive();
                 screenState[drawer] = !screenState[drawer];
             } else {
                 console.warn(lc, `Drawer "${drawer}" does not exist`);
@@ -153,6 +181,10 @@ Scope {
 
         function isOpen(drawer: string): string {
             const screenState = ShellState.forActive();
+            if (drawer === "clipboard")
+                return screenState.clipboard && screenState.clipboardTab === 0 ? "1" : "0";
+            if (drawer === "notes")
+                return screenState.clipboard && screenState.clipboardTab === 1 ? "1" : "0";
             if (typeof screenState[drawer] !== "boolean")
                 return "unknown";
             return screenState[drawer] ? "1" : "0";

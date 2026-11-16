@@ -105,24 +105,17 @@ Item {
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: Tokens.padding.medium
         spacing: Tokens.spacing.medium
 
-        // Header
+        // Action row
         RowLayout {
             Layout.fillWidth: true
             spacing: Tokens.spacing.small
 
-            MaterialIcon {
-                text: "edit_note"
-                color: Colours.palette.m3primary
-                fontStyle: Tokens.font.icon.medium
-            }
-
             StyledText {
-                text: Tr.tr("Notes & Snippets")
-                font: Tokens.font.title.small
-                color: Colours.palette.m3onSurface
+                text: root.saveStatusText
+                font: Tokens.font.label.medium
+                color: Colours.palette.m3outline
             }
 
             Item {
@@ -149,13 +142,6 @@ Item {
                 font: Tokens.font.icon.small
                 enabled: root.activeFilePath !== ""
                 onClicked: root.deleteCurrentNote()
-            }
-
-            IconButton {
-                icon: "close"
-                type: IconButton.Text
-                font: Tokens.font.icon.small
-                onClicked: root.screenState.notes = false
             }
         }
 

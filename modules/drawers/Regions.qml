@@ -78,12 +78,6 @@ Region {
         height: panel.height * (1 - root.panels.clipboard.offsetScale) + root.borderThickness
     }
 
-    R {
-        panel: root.panels.notes
-        x: 0
-        width: panel.width * (1 - root.panels.notes.offsetScale) + root.borderThickness
-    }
-
     component R: Region {
         required property Item panel
 

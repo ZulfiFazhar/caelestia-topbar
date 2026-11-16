@@ -23,7 +23,6 @@ CustomMouseArea {
     property bool osdShortcutActive
     property bool utilitiesShortcutActive
     property bool clipboardHoverActive
-    property bool notesHoverActive
 
     function withinPanelHeight(panel: Item, x: real, y: real): bool {
         const panelY = bar.implicitHeight + panel.y;
@@ -75,10 +74,6 @@ CustomMouseArea {
             screenState.clipboard = false;
             clipboardHoverActive = false;
         }
-        if (screenState.notes && !inLeftPanel(panels.notes, event.x, event.y, true)) {
-            screenState.notes = false;
-            notesHoverActive = false;
-        }
     }
     onContainsMouseChanged: {
         if (!containsMouse) {
@@ -108,11 +103,6 @@ CustomMouseArea {
             if (clipboardHoverActive && !panels.clipboard.isFocused) {
                 screenState.clipboard = false;
                 clipboardHoverActive = false;
-            }
-
-            if (notesHoverActive && !panels.notes.isFocused) {
-                screenState.notes = false;
-                notesHoverActive = false;
             }
         }
     }
@@ -276,19 +266,6 @@ CustomMouseArea {
             }
         }
 
-        // Show notes on hover
-        if (!screenState.notes) {
-            if (inLeftPanel(panels.notes, x, y, true)) {
-                notesHoverActive = true;
-                screenState.notes = true;
-            }
-        } else if (notesHoverActive) {
-            if (!inLeftPanel(panels.notes, x, y, true) && !panels.notes.isFocused) {
-                notesHoverActive = false;
-                screenState.notes = false;
-            }
-        }
-
         // Show popouts on hover
         if (y < bar.implicitHeight) {
             bar.checkPopout(x);
@@ -302,7 +279,6 @@ CustomMouseArea {
     Connections {
         function onClipboardChanged() {
             if (root.screenState.clipboard) {
-                root.screenState.notes = false;
                 root.screenState.launcher = false;
                 root.screenState.dashboard = false;
             } else {
@@ -312,11 +288,9 @@ CustomMouseArea {
 
         function onNotesChanged() {
             if (root.screenState.notes) {
-                root.screenState.clipboard = false;
-                root.screenState.launcher = false;
-                root.screenState.dashboard = false;
-            } else {
-                root.notesHoverActive = false;
+                root.screenState.notes = false;
+                root.screenState.clipboardTab = 1;
+                root.screenState.clipboard = true;
             }
         }
 
@@ -324,14 +298,12 @@ CustomMouseArea {
             if (root.screenState.launcher) {
                 root.screenState.dashboard = false;
                 root.screenState.clipboard = false;
-                root.screenState.notes = false;
             } else {
                 // If launcher is hidden, clear shortcut flags for dashboard and OSD
                 root.dashboardShortcutActive = false;
                 root.osdShortcutActive = false;
                 root.utilitiesShortcutActive = false;
                 root.clipboardHoverActive = false;
-                root.notesHoverActive = false;
 
                 // Also hide dashboard and OSD if they're not being hovered
                 const inDashboardArea = root.inBottomPanel(root.panels.dashboard, root.mouseX, root.mouseY);
@@ -351,9 +323,7 @@ CustomMouseArea {
             if (root.screenState.dashboard) {
                 root.screenState.launcher = false;
                 root.screenState.clipboard = false;
-                root.screenState.notes = false;
-                root.clipboardShortcutActive = false;
-                root.notesShortcutActive = false;
+                root.clipboardHoverActive = false;
                 // Dashboard became visible, immediately check if this should be shortcut mode
                 const inDashboardArea = root.inBottomPanel(root.panels.dashboard, root.mouseX, root.mouseY);
                 if (!inDashboardArea) {

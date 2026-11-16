@@ -13,7 +13,6 @@ import qs.modules.utilities as Utilities
 import qs.modules.bar.popouts as BarPopouts
 import qs.modules.utilities.toasts as Toasts
 import qs.modules.clipboard as Clipboard
-import qs.modules.notes as Notes
 
 Item {
     id: root
@@ -36,7 +35,6 @@ Item {
     readonly property alias toasts: toasts
     readonly property alias sidebar: sidebar
     readonly property alias clipboard: clipboard
-    readonly property alias notes: notes
 
     anchors.fill: parent
     anchors.margins: borderThickness
@@ -164,14 +162,5 @@ Item {
 
         anchors.left: parent.left
         anchors.bottom: parent.bottom
-    }
-
-    Notes.Wrapper {
-        id: notes
-
-        screenState: root.screenState
-
-        anchors.left: parent.left
-        anchors.verticalCenter: parent.verticalCenter
     }
 }

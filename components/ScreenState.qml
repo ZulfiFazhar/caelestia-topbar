@@ -14,6 +14,9 @@ PersistentProperties {
     property bool clipboard
     property bool notes
 
+    // Drawer tabs
+    property int clipboardTab: 0
+
     // Dashboard state
     property int dashboardTab
     property date dashboardDate: new Date()

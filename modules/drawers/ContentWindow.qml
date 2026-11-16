@@ -246,17 +246,6 @@ StyledWindow {
         }
 
         PanelBg {
-            id: notesBg
-
-            panel: panels.notes
-            deformAmount: 0.05
-            topRightRadius: radius
-            bottomRightRadius: radius
-            topLeftRadius: Math.max(0, Math.min(1, panels.notes.offsetScale / 0.3)) * radius
-            bottomLeftRadius: Math.max(0, Math.min(1, panels.notes.offsetScale / 0.3)) * radius
-        }
-
-        PanelBg {
             id: popoutBg
 
             // Extra height to prevent horizontal movement deformation partially detaching panel from topbar
@@ -318,9 +307,6 @@ StyledWindow {
             }
             clipboard.transform: Matrix4x4 {
                 matrix: clipboardBg.deformMatrix
-            }
-            notes.transform: Matrix4x4 {
-                matrix: notesBg.deformMatrix
             }
             popouts.transform: Matrix4x4 {
                 matrix: popoutBg.deformMatrix
