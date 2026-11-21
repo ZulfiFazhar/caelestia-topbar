@@ -87,7 +87,7 @@ Item {
             StyledText {
                 text: Tr.tr("%1 items").arg(listModel.count)
                 font: Tokens.font.label.medium
-                color: Colours.palette.m3outline
+                color: Colours.palette.m3onSurfaceVariant
             }
 
             Item {
@@ -210,7 +210,7 @@ Item {
                     visible: listModel.count === 0 && !listProc.running
                     text: searchBar.text ? Tr.tr("No matching clipboard items") : Tr.tr("Clipboard history is empty")
                     font: Tokens.font.body.medium
-                    color: Colours.palette.m3outline
+                    color: Colours.palette.m3onSurfaceVariant
                 }
             }
         }

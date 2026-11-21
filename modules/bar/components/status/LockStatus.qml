@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import Caelestia.Config
 import qs.components
 import qs.services
 
@@ -8,6 +9,8 @@ RowLayout {
 
     required property color colour
     required property int parentSpacing
+
+    readonly property font iconFont: Tokens.font.icon.builders.small.scale(Tokens.sizes.bar.innerWidth / 40).build()
 
     property real gap: Hypr.capsLock && Hypr.numLock ? parentSpacing : 0
     property real capsWidth: Hypr.capsLock ? capslockIcon.implicitWidth : 0
@@ -48,6 +51,7 @@ RowLayout {
 
             text: "keyboard_capslock_badge"
             color: root.colour
+            fontStyle: root.iconFont
             fill: 1
             grade: 25
 
@@ -78,6 +82,7 @@ RowLayout {
 
             text: "looks_one"
             color: root.colour
+            fontStyle: root.iconFont
             fill: 1
             grade: 25
 

@@ -204,7 +204,7 @@ ColumnLayout {
                     }
                     return Tr.tr("Unknown network");
                 }
-                color: Colours.palette.m3outline
+                color: Colours.palette.m3onSurfaceVariant
                 font: Tokens.font.body.small
             }
 
@@ -377,7 +377,7 @@ ColumnLayout {
 
                     anchors.centerIn: parent
                     text: Tr.tr("Password")
-                    color: Colours.palette.m3outline
+                    color: Colours.palette.m3onSurfaceVariant
                     font: Tokens.font.mono.medium
                     opacity: passwordContainer.passwordBuffer ? 0 : 1
 

@@ -10,9 +10,10 @@ import qs.services
 StyledRect {
     id: root
 
+    readonly property real scaleFactor: Tokens.sizes.bar.innerWidth / 40
     readonly property color colour: Colours.palette.m3tertiary
     readonly property int padding: Config.bar.clock.background ? Tokens.padding.medium : Tokens.padding.extraSmall
-    readonly property var font: Tokens.font.body.builders.small.scale(1.1)
+    readonly property var font: Tokens.font.body.builders.small.scale(1.1 * scaleFactor)
 
     implicitHeight: Tokens.sizes.bar.innerWidth
     implicitWidth: layout.implicitWidth + root.padding * 2
@@ -35,6 +36,7 @@ StyledRect {
             sourceComponent: MaterialIcon {
                 text: "calendar_month"
                 color: root.colour
+                fontStyle: Tokens.font.icon.builders.small.scale(root.scaleFactor).build()
             }
         }
 
@@ -50,7 +52,7 @@ StyledRect {
                 StyledText {
                     Layout.alignment: Qt.AlignVCenter
                     text: Time.format("ddd")
-                    font: Tokens.font.body.builders.small.scale(0.9).build()
+                    font: Tokens.font.body.builders.small.scale(0.9 * root.scaleFactor).build()
                     color: root.colour
                 }
 
@@ -64,7 +66,7 @@ StyledRect {
                 StyledRect {
                     Layout.alignment: Qt.AlignVCenter
                     implicitWidth: 1
-                    implicitHeight: root.font.size ?? 14
+                    implicitHeight: Math.round(14 * root.scaleFactor)
                     color: Colours.palette.m3outlineVariant
                 }
             }
@@ -103,7 +105,7 @@ StyledRect {
 
                 sourceComponent: StyledText {
                     text: Time.amPmStr.toLowerCase()
-                    font: Tokens.font.body.builders.small.scale(0.85).build()
+                    font: Tokens.font.body.builders.small.scale(0.85 * root.scaleFactor).build()
                     color: root.colour
                 }
             }

@@ -105,7 +105,7 @@ StyledRect {
         sourceComponent: StyledText {
             animate: true
             text: root.modelData?.timeStr ?? ""
-            color: Colours.palette.m3outline
+            color: Colours.palette.m3onSurfaceVariant
             font: Tokens.font.body.small
         }
     }

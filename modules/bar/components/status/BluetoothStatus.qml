@@ -13,6 +13,8 @@ Item {
 
     required property color colour
 
+    readonly property font iconFont: Tokens.font.icon.builders.small.scale(Tokens.sizes.bar.innerWidth / 40).build()
+
     implicitWidth: layout.implicitWidth
     implicitHeight: layout.implicitHeight
 
@@ -30,6 +32,7 @@ Item {
         // Bluetooth icon
         MaterialIcon {
             animate: true
+            fontStyle: root.iconFont
             text: {
                 if (!Bluetooth.defaultAdapter?.enabled) // qmllint disable unresolved-type
                     return "bluetooth_disabled";
@@ -52,6 +55,7 @@ Item {
                 required property BluetoothDevice modelData
 
                 animate: true
+                fontStyle: root.iconFont
                 text: Icons.getBluetoothIcon(modelData?.icon)
                 color: root.colour
                 fill: 1

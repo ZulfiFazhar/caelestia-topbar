@@ -104,7 +104,7 @@ StyledRect {
                 anchors.centerIn: parent
                 text: "chevron_left"
                 color: Colours.palette.m3onSurfaceVariant
-                fontStyle: Tokens.font.icon.medium
+                fontStyle: Tokens.font.icon.builders.medium.scale(Tokens.sizes.bar.innerWidth / 40).build()
                 rotation: root.expanded ? 180 : 0
 
                 Behavior on rotation {

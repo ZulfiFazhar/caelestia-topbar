@@ -3,10 +3,26 @@ pragma ComponentBehavior: Bound
 import QtQuick.Layouts
 import Caelestia.Config
 import Caelestia.I18n
+import qs.components.controls
 import qs.modules.nexus.common
 
 PageBase {
     id: root
+
+    readonly property list<MenuItem> sizeItems: [
+        MenuItem {
+            text: Tr.trCtx("Small", "bar size")
+            value: 32
+        },
+        MenuItem {
+            text: Tr.trCtx("Normal", "bar size")
+            value: 40
+        },
+        MenuItem {
+            text: Tr.trCtx("Big", "bar size")
+            value: 48
+        }
+    ]
 
     title: Tr.tr("Taskbar")
     isSubPage: true
@@ -39,7 +55,6 @@ PageBase {
         }
 
         StepperRow {
-            last: true
             label: Tr.tr("Drag threshold")
             subtext: Tr.tr("Pixels dragged before the bar reveals")
             value: Config.bar.dragThreshold
@@ -47,6 +62,15 @@ PageBase {
             to: 200
             stepSize: 5
             onMoved: v => GlobalConfig.bar.dragThreshold = v
+        }
+
+        SelectRow {
+            last: true
+            label: Tr.tr("Size")
+            subtext: Tr.tr("Taskbar height and component scale")
+            menuItems: root.sizeItems
+            active: root.sizeItems.find(i => i.value === TokenConfig.sizes.bar.innerWidth) ?? root.sizeItems[1]
+            onSelected: item => TokenConfig.sizes.bar.innerWidth = item.value
         }
 
         // Components

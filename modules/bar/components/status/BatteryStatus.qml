@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell.Services.UPower
+import Caelestia.Config
 import qs.components
 import qs.services
 import qs.utils
@@ -7,6 +8,7 @@ import qs.utils
 MaterialIcon {
     required property color colour
 
+    fontStyle: Tokens.font.icon.builders.small.scale(Tokens.sizes.bar.innerWidth / 40).build()
     animate: true
     text: {
         if (!UPower.displayDevice.isLaptopBattery) {

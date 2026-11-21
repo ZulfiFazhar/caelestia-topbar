@@ -77,6 +77,7 @@ Item {
             animate: true
             text: Icons.getAppCategoryIcon(Hypr.activeToplevel?.lastIpcObject.class, "desktop_windows")
             color: root.colour
+            fontStyle: Tokens.font.icon.builders.small.scale(Tokens.sizes.bar.innerWidth / 40).build()
         }
 
         Item {
@@ -98,7 +99,7 @@ Item {
         id: metrics
 
         text: root.windowTitle
-        font: root.Tokens.font.body.builders.small.letterSpacing(1.4).build()
+        font: root.Tokens.font.body.builders.small.scale(Tokens.sizes.bar.innerWidth / 40).letterSpacing(1.4).build()
         elide: Qt.ElideRight
         elideWidth: Math.max(50, root.maxWidth - icon.width - 8)
 

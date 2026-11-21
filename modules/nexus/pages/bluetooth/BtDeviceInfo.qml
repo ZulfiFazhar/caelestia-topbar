@@ -212,7 +212,7 @@ PageBase {
 
                     StyledText {
                         text: root.device?.batteryAvailable ? Strings.percentOne(root.device.battery) : Tr.trCtx("Unavailable", "bluetooth device state")
-                        color: Colours.palette.m3outline
+                        color: Colours.palette.m3onSurfaceVariant
                         font: Tokens.font.body.small
                     }
                 }
@@ -252,7 +252,7 @@ PageBase {
 
                 StyledText {
                     text: root.device?.address ?? ""
-                    color: Colours.palette.m3outline
+                    color: Colours.palette.m3onSurfaceVariant
                     font: Tokens.font.body.small
                 }
             }

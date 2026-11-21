@@ -115,7 +115,7 @@ Item {
             StyledText {
                 text: root.saveStatusText
                 font: Tokens.font.label.medium
-                color: Colours.palette.m3outline
+                color: Colours.palette.m3onSurfaceVariant
             }
 
             Item {
@@ -211,7 +211,7 @@ Item {
                     visible: chipListView.count === 0
                     text: Tr.tr("No notes yet. Click '+' to create one.")
                     font: Tokens.font.label.medium
-                    color: Colours.palette.m3outline
+                    color: Colours.palette.m3onSurfaceVariant
                 }
             }
         }
@@ -272,13 +272,13 @@ Item {
             StyledText {
                 text: root.saveStatusText
                 font: Tokens.font.label.small
-                color: Colours.palette.m3outline
+                color: Colours.palette.m3onSurfaceVariant
             }
 
             StyledText {
                 text: `${editor.text.length} chars`
                 font: Tokens.font.label.small
-                color: Colours.palette.m3outline
+                color: Colours.palette.m3onSurfaceVariant
             }
 
             Item {
@@ -288,7 +288,7 @@ Item {
             StyledText {
                 text: root.activeFileBaseName ? `${root.activeFileBaseName}.md` : ""
                 font: Tokens.font.label.small
-                color: Colours.palette.m3outline
+                color: Colours.palette.m3onSurfaceVariant
                 elide: Text.ElideLeft
             }
         }

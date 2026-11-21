@@ -15,8 +15,11 @@ StyledRect {
     property color colour: Colours.palette.m3secondary
     readonly property alias items: iconRow
 
-    readonly property int padding: Tokens.padding.large
-    readonly property int spacing: Tokens.spacing.medium
+    readonly property real scaleFactor: Tokens.sizes.bar.innerWidth / 40
+    readonly property int padding: Math.round(Tokens.padding.large * scaleFactor)
+    readonly property int spacing: Math.round(Tokens.spacing.medium * scaleFactor)
+    readonly property font iconFontMedium: Tokens.font.icon.builders.medium.scale(scaleFactor).build()
+    readonly property font iconFontSmall: Tokens.font.icon.builders.small.scale(scaleFactor).build()
 
     // Index of the first/last entry that isn't collapsed, for edge margin gating
     readonly property int firstPresent: {
@@ -82,7 +85,7 @@ StyledRect {
                             animate: true
                             text: Icons.getVolumeIcon(Audio.volume, Audio.muted)
                             color: root.colour
-                            fontStyle: Tokens.font.icon.medium
+                            fontStyle: root.iconFontMedium
                             fill: 1
                         }
                     }
@@ -97,7 +100,7 @@ StyledRect {
                             animate: true
                             text: Icons.getMicVolumeIcon(Audio.sourceVolume, Audio.sourceMuted)
                             color: root.colour
-                            fontStyle: Tokens.font.icon.medium
+                            fontStyle: root.iconFontMedium
                             fill: 1
                         }
                     }
@@ -109,7 +112,7 @@ StyledRect {
                             animate: true
                             text: Hypr.kbLayout
                             color: root.colour
-                            font: Tokens.font.mono.medium
+                            font: Tokens.font.mono.builders.medium.scale(root.scaleFactor).build()
                         }
                     }
                 }
@@ -120,6 +123,7 @@ StyledRect {
                             animate: true
                             text: Nmcli.activeEthernet ? "cable" : Nmcli.active ? Icons.getNetworkIcon(Nmcli.active.strength ?? 0) : "wifi_off"
                             color: root.colour
+                            fontStyle: root.iconFontSmall
                         }
                     }
                 }
